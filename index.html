@@ -1,0 +1,35 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI-помощник для курса</title>
+</head>
+<body>
+    <h2>Спроси у ИИ по сайтам</h2>
+    <textarea id="question" rows="4" cols="50"></textarea><br>
+    <button onclick="askAI()">Спросить</button>
+    <div id="answer"></div>
+
+    <script>
+        async function askAI() {
+            const question = document.getElementById('question').value;
+            const answerDiv = document.getElementById('answer');
+            answerDiv.innerText = 'Думаю...';
+            
+            const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer sk-028cd0b039764c3eb333b7900e957c38'
+                },
+                body: JSON.stringify({
+                    model: 'deepseek-chat',
+                    messages: [{ role: 'user', content: question }]
+                })
+            });
+            const data = await response.json();
+            answerDiv.innerText = data.choices[0].message.content;
+        }
+    </script>
+</body>
+</html>
